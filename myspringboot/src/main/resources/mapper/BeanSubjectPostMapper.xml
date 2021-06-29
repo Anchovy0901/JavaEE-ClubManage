@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.setu.dao.BeanSubjectPostMapper" >
+  <resultMap id="BaseResultMap" type="com.setu.model.BeanSubjectPost" >
+    <id column="subjectPostId" property="subjectpostid" jdbcType="INTEGER" />
+    <result column="subjectPostTitle" property="subjectposttitle" jdbcType="VARCHAR" />
+    <result column="subjectPostContent" property="subjectpostcontent" jdbcType="VARCHAR" />
+    <result column="subjectPostTime" property="subjectposttime" jdbcType="TIMESTAMP" />
+    <result column="collectNum" property="collectnum" jdbcType="INTEGER" />
+    <result column="lookNum" property="looknum" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    subjectPostId, subjectPostTitle, subjectPostContent, subjectPostTime, collectNum, lookNum, userId
+  </sql>
+  <select id="selectSubjectPostByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from subjectPost
+    where userId = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteSubjectPost" parameterType="java.lang.Integer" >
+    delete from subjectPost
+    where subjectPostId = #{subjectpostid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSubjectPost" parameterType="com.setu.model.BeanSubjectPost" >
+    insert into subjectPost (subjectPostId, subjectPostTitle, subjectPostContent,
+      subjectPostTime, collectNum, lookNum, 
+      userId)
+    values (#{subjectpostid,jdbcType=INTEGER}, #{subjectposttitle,jdbcType=VARCHAR}, #{subjectpostcontent,jdbcType=VARCHAR},
+      #{subjectposttime,jdbcType=TIMESTAMP}, #{collectnum,jdbcType=INTEGER}, #{looknum,jdbcType=INTEGER}, 
+      #{userid,jdbcType=VARCHAR})
+  </insert>
+
+</mapper>

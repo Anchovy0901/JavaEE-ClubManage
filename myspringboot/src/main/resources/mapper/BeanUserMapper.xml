@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.setu.dao.BeanUserMapper" >
+  <resultMap id="BaseResultMap" type="com.setu.model.BeanUser" >
+    <id column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="userPwd" property="userpwd" jdbcType="VARCHAR" />
+    <result column="userSex" property="usersex" jdbcType="VARCHAR" />
+    <result column="userMajor" property="usermajor" jdbcType="VARCHAR" />
+    <result column="userClass" property="userclass" jdbcType="VARCHAR" />
+    <result column="userTel" property="usertel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    userId, userName, userPwd, userSex, userMajor, userClass, userTel
+  </sql>
+  <select id="selectAllUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+  </select>
+
+  <select id="selectUser" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where userId = #{userid,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectUserByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where userName = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteUser" parameterType="java.lang.String" >
+    delete from user
+    where userId = #{userid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertUser" parameterType="com.setu.model.BeanUser" >
+    insert into user (userId, userName, userPwd,
+      userSex, userMajor, userClass,
+      userTel)
+    values (#{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{userpwd,jdbcType=VARCHAR},
+      #{usersex,jdbcType=VARCHAR}, #{usermajor,jdbcType=VARCHAR}, #{userclass,jdbcType=VARCHAR},
+      #{usertel,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateUser" parameterType="com.setu.model.BeanUser" >
+    update user
+    set userName = #{username,jdbcType=VARCHAR},
+      userPwd = #{userpwd,jdbcType=VARCHAR},
+      userSex = #{usersex,jdbcType=VARCHAR},
+      userMajor = #{usermajor,jdbcType=VARCHAR},
+      userClass = #{userclass,jdbcType=VARCHAR},
+      userTel = #{usertel,jdbcType=VARCHAR}
+    where userId = #{userid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.setu.dao.BeanDepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.setu.model.BeanDepartment" >
+    <id column="departmentId" property="departmentid" jdbcType="INTEGER" />
+    <result column="departmentName" property="departmentname" jdbcType="VARCHAR" />
+    <result column="departmentLeader" property="departmentleader" jdbcType="VARCHAR" />
+    <result column="associationsId" property="associationsid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    departmentId, departmentName, departmentLeader, associationsId
+  </sql>
+  <select id="selectde" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from department
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </select>
+  <select id="selectDepartment" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </select>
+  <select id="selectDeIdbyname" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from department
+    where departmentName= #{departmentname,jdbcType=VARCHAR}
+  </select>
+  <select id="selectdepartmentid" resultMap="BaseResultMap" >
+    select *
+    from member
+    where userId = #{userid} and associationsId = #{associationsid}
+  </select>
+  <select id="selectDepartmentByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select a.departmentid,a.departmentname
+    from department a,member b
+    where a.departmentId = b.departmentId and userId=#{userid,jdbcType=VARCHAR} and a.departmentid !=0
+  </select>
+  <delete id="deleteDepartment" parameterType="java.lang.Integer" >
+    delete from department
+    where departmentId = #{departmentname,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertDepartment" parameterType="com.setu.model.BeanDepartment" >
+    insert into department ( departmentName, departmentLeader,
+      associationsId)
+    values  (#{departmentname,jdbcType=VARCHAR}, #{departmentleader,jdbcType=VARCHAR},
+      #{associationsid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.setu.model.BeanDepartment" >
+    insert into department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="departmentid != null" >
+        departmentId,
+      </if>
+      <if test="departmentname != null" >
+        departmentName,
+      </if>
+      <if test="departmentleader != null" >
+        departmentLeader,
+      </if>
+      <if test="associationsid != null" >
+        associationsId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="departmentid != null" >
+        #{departmentid,jdbcType=INTEGER},
+      </if>
+      <if test="departmentname != null" >
+        #{departmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentleader != null" >
+        #{departmentleader,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsid != null" >
+        #{associationsid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.setu.model.BeanDepartment" >
+    update department
+    <set >
+      <if test="departmentname != null" >
+        departmentName = #{departmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentleader != null" >
+        departmentLeader = #{departmentleader,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsid != null" >
+        associationsId = #{associationsid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.setu.model.BeanDepartment" >
+    update department
+    set departmentName = #{departmentname,jdbcType=VARCHAR},
+      departmentLeader = #{departmentleader,jdbcType=VARCHAR},
+      associationsId = #{associationsid,jdbcType=INTEGER}
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateDepartmentLeader" parameterType="com.setu.model.BeanDepartment" >
+    update department
+    set
+      departmentLeader = #{departmentleader,jdbcType=VARCHAR}
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateDepartmentName" parameterType="com.setu.model.BeanDepartment" >
+    update department
+    set
+      departmentName = #{departmentname,jdbcType=VARCHAR}
+    where departmentId = #{departmentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateMember" parameterType="com.setu.model.BeanMember" >
+    update member
+    set
+      departmentId = 0
+    where departmentId=#{departmentid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.setu.dao.BeanNoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.setu.model.BeanNotice" >
+    <id column="noticeId" property="noticeid" jdbcType="INTEGER" />
+    <result column="noticeRange" property="noticerange" jdbcType="VARCHAR" />
+    <result column="noticeName" property="noticename" jdbcType="VARCHAR" />
+    <result column="noticeContent" property="noticecontent" jdbcType="VARCHAR" />
+    <result column="noticeTime" property="noticetime" jdbcType="TIMESTAMP" />
+    <result column="associationsId" property="associationsid" jdbcType="INTEGER" />
+    <result column="departmentId" property="departmentid" jdbcType="INTEGER" />
+    <result column="noticeState" property="noticestate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    noticeId, noticeRange,noticeName, noticeContent, noticeTime, associationsId,departmentId, noticeState
+  </sql>
+  <select id="selectAllNotice" resultMap="BaseResultMap">
+    select *
+    from notice
+  </select>
+  <select id="selectNotice" resultMap="BaseResultMap">
+    select *
+    from notice
+    where noticeId =#{noticeId}
+  </select>
+  <select id="selectNoticeBySchool" resultMap="BaseResultMap">
+    select *
+    from notice
+    where noticeRange ="全校" and noticeState="审核通过"
+  </select>
+  <select id="selectNoticeByAssociation" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select noticeId,noticeRange,noticeName,noticeContent,noticeTime,noticeState
+    from notice a,associations b
+    where a.associationsId= b.associationsId and associationsName = #{associationsName} and noticeRange = "全社"
+  </select>
+  <select id="selectDepartmentid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select noticeId,noticeRange,noticeName,noticeContent,noticeTime,noticeState
+    from notice a,associations b
+    where a.associationsId= b.associationsId and associationsName = #{associationsName} and noticeRange = "部门"
+  </select>
+  <select id="selectNoticeByDepartment" resultMap="BaseResultMap"  >
+    select *
+    from notice
+    where  departmentId= #{departmentId} and noticeRange = "部门"
+  </select>
+
+  <select id="selectNoticeByAssociationId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from notice
+    where associationsId = #{associationsId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from notice
+    where noticeId = #{noticeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertNotice" parameterType="com.setu.model.BeanNotice">
+    insert into notice (noticeRange,noticeName, noticeContent,
+      noticeTime, associationsId, departmentId,noticeState
+      )
+    values ( #{noticerange,jdbcType=VARCHAR},#{noticename,jdbcType=VARCHAR}, #{noticecontent,jdbcType=VARCHAR},
+      #{noticetime,jdbcType=TIMESTAMP}, #{associationsid,jdbcType=INTEGER}, #{departmentid,jdbcType=INTEGER},#{noticestate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.setu.model.BeanNotice" >
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="noticeid != null" >
+        noticeId,
+      </if>
+      <if test="noticerange != null" >
+        noticeRange,
+      </if>
+      <if test="noticeconname != null" >
+        noticeName,
+      </if>
+      <if test="noticecontent != null" >
+        noticeContent,
+      </if>
+      <if test="noticetime != null" >
+        noticeTime,
+      </if>
+      <if test="associationsid != null" >
+        associationsId,
+      </if>
+      <if test="departmentid != null" >
+        departmentId,
+      </if>
+      <if test="noticestate != null" >
+        noticeState,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="noticeid != null" >
+        #{noticeid,jdbcType=INTEGER},
+      </if>
+      <if test="noticerange != null" >
+        #{noticerange,jdbcType=VARCHAR},
+      </if>
+      <if test="noticename != null" >
+        #{noticename,jdbcType=VARCHAR},
+      </if>
+      <if test="noticecontent != null" >
+        #{noticecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticetime != null" >
+        #{noticetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationsid != null" >
+        #{associationsid,jdbcType=INTEGER},
+      </if>
+      <if test="departmentid != null" >
+        #{departmentid,jdbcType=INTEGER},
+      </if>
+      <if test="noticestate != null" >
+        #{noticestate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.setu.model.BeanNotice" >
+    update notice
+    <set >
+      <if test="noticerange != null" >
+        noticeRange = #{noticerange,jdbcType=VARCHAR},
+      </if>
+      <if test="noticename != null" >
+        noticeName = #{noticename,jdbcType=VARCHAR},
+      </if>
+      <if test="noticecontent != null" >
+        noticeContent = #{noticecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticetime != null" >
+        noticeTime = #{noticetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationsid != null" >
+        associationsId = #{associationsid,jdbcType=INTEGER},
+      </if>
+      <if test="departmentid != null" >
+        departmentId = #{adepartmentid,jdbcType=INTEGER},
+      </if>
+      <if test="noticestate != null" >
+        noticeState = #{noticestate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where noticeId = #{noticeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateNotice" parameterType="com.setu.model.BeanNotice" >
+    update notice
+    set noticeRange = #{noticerange,jdbcType=VARCHAR},
+      noticeName = #{noticename,jdbcType=VARCHAR},
+      noticeContent = #{noticecontent,jdbcType=VARCHAR},
+      noticeTime = #{noticetime,jdbcType=TIMESTAMP},
+      associationsId = #{associationsid,jdbcType=INTEGER},
+      departmentId = #{departmentid,jdbcType=INTEGER},
+      noticeState = #{noticestate,jdbcType=VARCHAR}
+    where noticeId = #{noticeid,jdbcType=INTEGER}
+  </update>
+</mapper>

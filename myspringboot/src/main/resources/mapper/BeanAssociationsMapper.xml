@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.setu.dao.BeanAssociationsMapper" >
+  <resultMap id="BaseResultMap" type="com.setu.model.BeanAssociations" >
+    <id column="associationsId" property="associationsid" jdbcType="INTEGER" />
+    <result column="associationsName" property="associationsname" jdbcType="VARCHAR" />
+    <result column="associationsTime" property="associationstime" jdbcType="TIMESTAMP" />
+    <result column="associationsType" property="associationstype" jdbcType="VARCHAR" />
+    <result column="associationsIntroduction" property="associationsintroduction" jdbcType="VARCHAR" />
+    <result column="associationsNumber" property="associationsnumber" jdbcType="INTEGER" />
+    <result column="associationsLeader" property="associationsleader" jdbcType="VARCHAR" />
+    <result column="associationsApplicationTime" property="associationsapplicationtime" jdbcType="TIMESTAMP" />
+    <result column="associationsApplicationState" property="associationsapplicationstate" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="membermap" type="com.setu.model.BeanMember" >
+    <id column="memberId" property="memberid" jdbcType="INTEGER" />
+    <result column="memberPost" property="memberpost" jdbcType="VARCHAR" />
+    <result column="memberTime" property="membertime" jdbcType="TIMESTAMP" />
+    <result column="memberIntroduction" property="memberintroduction" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="associationsId" property="associationsid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    associationsId, associationsName, associationsTime, associationsType, associationsIntroduction,
+    associationsNumber, associationsLeader, associationsApplicationTime, associationsApplicationState
+  </sql>
+  <select id="selectAllAssociations" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from associations
+  </select>
+  <select id="selectAssociations" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from associations
+    where associationsId = #{associationsid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAssociationsByState" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select *
+    from associations
+    where associationsApplicationState = #{associationsapplicationstate,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAssociationsByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from associations
+    where associationsName = #{associationsNumber,jdbcType=INTEGER}
+  </select>
+  <select id="selectAssociationIdByUserId" resultMap="membermap" parameterType="java.lang.String" >
+    select associationsId
+    from member
+    where userId = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAssociationById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from associations
+    where associationsId = #{associationsid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from associations
+    where associationsId = #{associationsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertAssociation" parameterType="com.setu.model.BeanAssociations" >
+    insert into associations (associationsName,
+      associationsTime, associationsType, associationsIntroduction,
+      associationsNumber, associationsLeader,
+      associationsApplicationTime, associationsApplicationState
+      )
+    values ( #{associationsname,jdbcType=VARCHAR},
+      #{associationstime,jdbcType=TIMESTAMP}, #{associationstype,jdbcType=VARCHAR}, #{associationsintroduction,jdbcType=VARCHAR},
+      #{associationsnumber,jdbcType=INTEGER}, #{associationsleader,jdbcType=VARCHAR},
+      #{associationsapplicationtime,jdbcType=TIMESTAMP}, #{associationsapplicationstate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertMemberInAs" parameterType="com.setu.model.BeanMember" >
+    insert into member (memberId, memberPost, memberTime,
+      memberIntroduction, userId, associationsId
+      )
+    values (#{memberid,jdbcType=INTEGER}, #{memberpost,jdbcType=VARCHAR}, #{membertime,jdbcType=TIMESTAMP},
+      #{memberintroduction,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{associationsid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.setu.model.BeanAssociations" >
+    insert into associations
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="associationsid != null" >
+        associationsId,
+      </if>
+      <if test="associationsname != null" >
+        associationsName,
+      </if>
+      <if test="associationstime != null" >
+        associationsTime,
+      </if>
+      <if test="associationstype != null" >
+        associationsType,
+      </if>
+      <if test="associationsintroduction != null" >
+        associationsIntroduction,
+      </if>
+      <if test="associationsnumber != null" >
+        associationsNumber,
+      </if>
+      <if test="associationsleader != null" >
+        associationsLeader,
+      </if>
+      <if test="associationsapplicationtime != null" >
+        associationsApplicationTime,
+      </if>
+      <if test="associationsapplicationstate != null" >
+        associationsApplicationState,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="associationsid != null" >
+        #{associationsid,jdbcType=INTEGER},
+      </if>
+      <if test="associationsname != null" >
+        #{associationsname,jdbcType=VARCHAR},
+      </if>
+      <if test="associationstime != null" >
+        #{associationstime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationstype != null" >
+        #{associationstype,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsintroduction != null" >
+        #{associationsintroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsnumber != null" >
+        #{associationsnumber,jdbcType=INTEGER},
+      </if>
+      <if test="associationsleader != null" >
+        #{associationsleader,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsapplicationtime != null" >
+        #{associationsapplicationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationsapplicationstate != null" >
+        #{associationsapplicationstate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.setu.model.BeanAssociations" >
+    update associations
+    <set >
+      <if test="associationsname != null" >
+        associationsName = #{associationsname,jdbcType=VARCHAR},
+      </if>
+      <if test="associationstime != null" >
+        associationsTime = #{associationstime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationstype != null" >
+        associationsType = #{associationstype,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsintroduction != null" >
+        associationsIntroduction = #{associationsintroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsnumber != null" >
+        associationsNumber = #{associationsnumber,jdbcType=INTEGER},
+      </if>
+      <if test="associationsleader != null" >
+        associationsLeader = #{associationsleader,jdbcType=VARCHAR},
+      </if>
+      <if test="associationsapplicationtime != null" >
+        associationsApplicationTime = #{associationsapplicationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="associationsapplicationstate != null" >
+        associationsApplicationState = #{associationsapplicationstate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where associationsId = #{associationsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByAssociationsId" parameterType="com.setu.model.BeanAssociations" >
+    update associations
+    set associationsName = #{associationsname,jdbcType=VARCHAR},
+      associationsTime = #{associationstime,jdbcType=TIMESTAMP},
+      associationsType = #{associationstype,jdbcType=VARCHAR},
+      associationsIntroduction = #{associationsintroduction,jdbcType=VARCHAR},
+      associationsNumber = #{associationsnumber,jdbcType=INTEGER},
+      associationsLeader = #{associationsleader,jdbcType=VARCHAR},
+      associationsApplicationTime = #{associationsapplicationtime,jdbcType=TIMESTAMP},
+      associationsApplicationState = #{associationsapplicationstate,jdbcType=VARCHAR}
+    where associationsId = #{associationsid,jdbcType=INTEGER}
+  </update>
+</mapper>
